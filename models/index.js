@@ -37,7 +37,9 @@ const workoutSchema = new Schema({
       }
     }
   ],
-  totalDuration: Number
+  totalDuration: {
+    type: Number
+  }
 });
 
 workoutSchema.methods.addDurations = function() {

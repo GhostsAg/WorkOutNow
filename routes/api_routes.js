@@ -35,10 +35,10 @@ router.get("/api/workouts/", (req, res) => {
 });
 
 router.put("/api/workouts/:id", (req, res) => {
-  console.log(req.body);
+  aggregate += req.body.duration;
   Workout.collection.findOneAndUpdate({ _id: req.params.id },
     {
-      $push: {exercises: req.body} 
+      $push: {exercises: req.body}, totalDuration: aggregate 
   }, {new: true})
   .then( dbUpdate => {
     console.log(dbUpdate);
