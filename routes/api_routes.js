@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Workout = require("../models");
-let aggregate = 0;
+let aggregate;
 
 // router.post("/api/workout", ({ body }, res) => {
 //   Workout.create(body)
@@ -13,21 +13,8 @@ let aggregate = 0;
 // });
 
 router.post("/api/workouts", ({ body }, res) => {
-  // const workout = new Workout(body)
-  console.log("body", body);
-  // let aggregate += body.
-  // Workout.insertMany(body)
-  //   .then(dbWorkout => {
-  //     res.json(dbWorkout);
-  //   })
-  //   .catch(err => {
-  //     res.status(400).json(err);
-  //   });
-});
-
-router.get("/api/workouts/", (req, res) => {
-  Workout.find({})
-    .sort({ date: -1 })
+  aggregate = 0;
+  Workout.create({})
     .then(dbWorkout => {
       res.json(dbWorkout);
     })
@@ -36,21 +23,27 @@ router.get("/api/workouts/", (req, res) => {
     });
 });
 
-router.put("/api/workouts/:id", (req, res) => {
+router.get("/api/workouts/", (req, res) => {
+  Workout.find({})
+  .sort({ date: -1 })
+  .then(dbWorkout => {
+    res.json(dbWorkout);
+  })
+  .catch(err => {
+    res.status(400).json(err);
+  });
+});
 
-  Workout.collection.findOneAndUpdate({
-    _id: req.params.id
-  }, { $push: {exercise: req.body},
-  totalDuration: aggregate
- })
+router.put("/api/workouts/:id", (req, res) => {
+  console.log(req.body);
+  Workout.collection.findOneAndUpdate({ _id: req.params.id },
+    {
+      $push: {exercises: req.body} 
+  }, {new: true})
   .then( dbUpdate => {
     console.log(dbUpdate);
     res.send(dbUpdate);
-  })
-  
-  // /updateOne({
-  //   exercises: req.body
-  // });
+  });
 });
 
 module.exports = router;
